@@ -165,7 +165,7 @@ export default function Home() {
                   </div>
                 ) : (
                   <div>
-                    <p className="line-clamp-4 leading-relaxed whitespace-pre-wrap">
+                    <p className="leading-relaxed whitespace-pre-wrap break-words">
                       {text}
                     </p>
                     <span className="text-[11px] text-neutral-400 block mt-1.5 font-medium capitalize">
