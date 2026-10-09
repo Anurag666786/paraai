@@ -326,7 +326,7 @@ export default function Home() {
                 title="Generate summary"
               >
                 {loading ? (
-                  <Loader2 className="w-4 h-4 animate-spin text-black" />
+                  <Loader2 className="w-4 h-4 animate-spin text-white" />
                 ) : (
                   <ArrowUp className="w-4 h-4 stroke-[2.5]" />
                 )}
