@@ -99,7 +99,7 @@ export default function Home() {
       <header className="sticky top-0 z-30 w-full backdrop-blur-xl bg-black/60 border-b border-neutral-900 px-4 sm:px-6 h-14 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="w-7 h-7 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-center text-white">
-            <Sparkles className="w-4 h-4 text-neutral-200 animate-pulse" />
+            <Sparkles className="w-4 h-4 text-neutral-200" />
           </div>
           <span className="font-semibold text-sm tracking-tight text-violet-400 ">
             Para AI
