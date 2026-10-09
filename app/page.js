@@ -95,17 +95,16 @@ export default function Home() {
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-b from-white/[0.05] to-transparent blur-[120px] rounded-full" />
       </div>
-
       {/* ChatGPT Top Navigation Bar */}
       <header className="sticky top-0 z-30 w-full backdrop-blur-xl bg-black/60 border-b border-neutral-900 px-4 sm:px-6 h-14 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="w-7 h-7 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-center text-white">
-            <Sparkles className="w-4 h-4 text-neutral-200" />
+            <Sparkles className="w-4 h-4 text-neutral-200 animate-pulse" />
           </div>
-          <span className="font-semibold text-sm tracking-tight text-white">
+          <span className="font-semibold text-sm tracking-tight text-violet-400 ">
             Para AI
           </span>
-          <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-neutral-900 text-neutral-400 border border-neutral-800 hidden sm:inline-block">
+          <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-neutral-900 text-neutral-400 border border-neutral-800 hidden sm:inline-block ">
             Anurag Developers
           </span>
         </div>
@@ -113,7 +112,7 @@ export default function Home() {
         {(summary || text || pdfFile) && (
           <button
             onClick={handleNewSummary}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-neutral-300 hover:text-white bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-violet-300 hover:text-violet-400 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 transition-colors"
             title="Start new summary"
           >
             <RotateCcw className="w-3.5 h-3.5" />
@@ -125,24 +124,95 @@ export default function Home() {
       {/* Main Container */}
       <div className="flex-1 w-full max-w-3xl mx-auto px-4 sm:px-6 flex flex-col justify-between py-6 relative z-10">
         {!summary ? (
-          /* Empty / Hero State (ChatGPT style greeting) */
+          /* Premium Animated Hero Section */
           <div className="flex-1 flex flex-col items-center justify-center text-center my-auto py-12">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4 }}
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.18,
+                    delayChildren: 0.1,
+                  },
+                },
+              }}
               className="flex flex-col items-center"
             >
-              <div className="w-14 h-14 rounded-2xl bg-neutral-900 border border-neutral-800 flex items-center justify-center mb-6 shadow-2xl ring-1 ring-white/10">
-                <Sparkles className="w-7 h-7 text-neutral-100" />
-              </div>
-              <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-2">
-                What would you like to summarize?
-              </h1>
-              <p className="text-neutral-400 text-sm sm:text-base max-w-md leading-relaxed">
-                Paste your content or attach a PDF to generate structured,
-                actionable insights.
-              </p>
+              {/* Animated Icon */}
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 25, scale: 0.7, rotate: -12 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    rotate: 0,
+                    transition: {
+                      type: "spring",
+                      stiffness: 180,
+                      damping: 14,
+                    },
+                  },
+                }}
+                animate={{
+                  y: [0, -7, 0],
+                }}
+                className="relative mb-8"
+              >
+                {/* Glow Effect */}
+                <div className="absolute -inset-5 rounded-[2rem] bg-violet-500/20 blur-2xl animate-pulse" />
+
+                {/* Icon Container */}
+                <div className="relative w-20 h-20 rounded-3xl bg-gradient-to-br from-violet-500/20 via-neutral-900 to-indigo-500/20 border border-violet-400/30 flex items-center justify-center shadow-[0_0_40px_rgba(139,92,246,0.15)]">
+                  <Sparkles className="w-9 h-9 text-violet-300" />
+                </div>
+              </motion.div>
+
+              {/* Heading Reveal */}
+              <motion.h1
+                variants={{
+                  hidden: { opacity: 0, y: 25, filter: "blur(10px)" },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    filter: "blur(0px)",
+                    transition: { duration: 0.8, ease: "easeOut" },
+                  },
+                }}
+                className="text-3xl sm:text-5xl font-semibold tracking-tight text-white mb-4"
+              >
+                What would you like to{" "}
+                <span className="bg-gradient-to-r from-violet-300 via-purple-200 to-indigo-300 bg-clip-text text-transparent">
+                  summarize?
+                </span>
+              </motion.h1>
+
+              {/* Description Reveal */}
+              <motion.p
+                variants={{
+                  hidden: { opacity: 0, y: 18 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.7, ease: "easeOut" },
+                  },
+                }}
+                className="text-neutral-400 text-sm sm:text-base max-w-md leading-relaxed"
+              >
+                Paste your content or attach a PDF to transform complex
+                information into clear, structured, actionable insights.
+              </motion.p>
+
+              {/* Animated Accent */}
+              <motion.div
+                initial={{ opacity: 0, scaleX: 0 }}
+                animate={{ opacity: 1, scaleX: 1 }}
+                transition={{ delay: 0.8, duration: 0.7, ease: "easeOut" }}
+                className="mt-8 h-px w-32 origin-center bg-gradient-to-r from-transparent via-violet-400/70 to-transparent"
+              />
             </motion.div>
           </div>
         ) : (
@@ -189,7 +259,7 @@ export default function Home() {
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="font-semibold text-sm text-neutral-200">
+                  <span className="font-semibold text-sm text-violet-400">
                     Para AI
                   </span>
                 </div>
@@ -320,13 +390,13 @@ export default function Home() {
                 disabled={loading || (!text.trim() && !pdfFile)}
                 className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
                   (text.trim() || pdfFile) && !loading
-                    ? "bg-white text-black hover:bg-neutral-200 shadow-md cursor-pointer"
+                    ? "bg-violet-300 text-black hover:bg-violet-400 shadow-md cursor-pointer"
                     : "bg-[#2f2f2f] text-neutral-500 cursor-not-allowed"
                 }`}
                 title="Generate summary"
               >
                 {loading ? (
-                  <Loader2 className="w-4 h-4 animate-spin text-white" />
+                  <Loader2 className="w-4 h-4 animate-spin text-violet-300" />
                 ) : (
                   <ArrowUp className="w-4 h-4 stroke-[2.5]" />
                 )}
