@@ -9,6 +9,12 @@ import {
   Copy,
   Sparkles,
   Loader2,
+  ArrowUp,
+  Paperclip,
+  X,
+  ChevronDown,
+  RotateCcw,
+  Check,
 } from "lucide-react";
 
 export default function Home() {
@@ -77,175 +83,265 @@ export default function Home() {
     }
   };
 
+  const handleNewSummary = () => {
+    setText("");
+    setSummary("");
+    setPdfFile(null);
+  };
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-6 md:p-12 font-sans selection:bg-indigo-100 selection:text-indigo-900">
-      <div className="max-w-3xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-12"
-        >
-          <div className="inline-flex items-center justify-center p-3 bg-indigo-100 rounded-2xl mb-4 text-indigo-600 shadow-inner">
-            <Sparkles className="w-8 h-8" />
+    <main className="min-h-screen bg-black text-neutral-100 flex flex-col font-sans selection:bg-neutral-700 selection:text-white relative">
+      {/* Background Ambient Glow */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-b from-white/[0.05] to-transparent blur-[120px] rounded-full" />
+      </div>
+
+      {/* ChatGPT Top Navigation Bar */}
+      <header className="sticky top-0 z-30 w-full backdrop-blur-xl bg-black/60 border-b border-neutral-900 px-4 sm:px-6 h-14 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-center text-white">
+            <Sparkles className="w-4 h-4 text-neutral-200" />
           </div>
-          <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 tracking-tight mb-4">
+          <span className="font-semibold text-sm tracking-tight text-white">
             Para AI
-          </h1>
-          <p className="text-gray-500 text-lg max-w-xl mx-auto">
-            Transform lengthy documents into clear, concise insights in seconds.
-          </p>
-        </motion.div>
+          </span>
+          <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-neutral-900 text-neutral-400 border border-neutral-800 hidden sm:inline-block">
+            Anurag Developers
+          </span>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/50 relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-500" />
+        {(summary || text || pdfFile) && (
+          <button
+            onClick={handleNewSummary}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-neutral-300 hover:text-white bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 transition-colors"
+            title="Start new summary"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>New summary</span>
+          </button>
+        )}
+      </header>
 
-          <div className="space-y-6">
-            <div>
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
-                <FileText className="w-4 h-4 text-indigo-500" />
-                Paste Text
-              </label>
-              <textarea
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                placeholder="Paste your content here..."
-                className="w-full h-48 border border-gray-200 rounded-2xl p-5 resize-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all duration-300 bg-gray-50/50 hover:bg-gray-50 text-gray-700 placeholder:text-gray-400"
-              />
-            </div>
+      {/* Main Container */}
+      <div className="flex-1 w-full max-w-3xl mx-auto px-4 sm:px-6 flex flex-col justify-between py-6 relative z-10">
+        {!summary ? (
+          /* Empty / Hero State (ChatGPT style greeting) */
+          <div className="flex-1 flex flex-col items-center justify-center text-center my-auto py-12">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4 }}
+              className="flex flex-col items-center"
+            >
+              <div className="w-14 h-14 rounded-2xl bg-neutral-900 border border-neutral-800 flex items-center justify-center mb-6 shadow-2xl ring-1 ring-white/10">
+                <Sparkles className="w-7 h-7 text-neutral-100" />
+              </div>
+              <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-2">
+                What would you like to summarize?
+              </h1>
+              <p className="text-neutral-400 text-sm sm:text-base max-w-md leading-relaxed">
+                Paste your content or attach a PDF to generate structured,
+                actionable insights.
+              </p>
+            </motion.div>
+          </div>
+        ) : (
+          /* Conversation Thread (ChatGPT style message stream) */
+          <div className="flex-1 space-y-6 pt-2 pb-6">
+            {/* User Query Message */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex justify-end"
+            >
+              <div className="bg-[#262626] text-neutral-200 text-sm sm:text-base rounded-2xl rounded-tr-md px-4 py-3 max-w-[85%] border border-neutral-700/60 shadow-sm">
+                {pdfFile ? (
+                  <div className="flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-neutral-300 shrink-0" />
+                    <span className="font-medium text-white truncate max-w-[240px]">
+                      {pdfFile.name}
+                    </span>
+                    <span className="text-xs text-neutral-400">({length})</span>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="line-clamp-4 leading-relaxed whitespace-pre-wrap">
+                      {text}
+                    </p>
+                    <span className="text-[11px] text-neutral-400 block mt-1.5 font-medium capitalize">
+                      {length} summary
+                    </span>
+                  </div>
+                )}
+              </div>
+            </motion.div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
-                  <UploadCloud className="w-4 h-4 text-indigo-500" />
-                  Upload PDF
-                </label>
-                <div className="relative group">
+            {/* Assistant AI Response Message */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="flex items-start gap-3.5 sm:gap-4"
+            >
+              <div className="w-8 h-8 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                <Sparkles className="w-4 h-4 text-neutral-200" />
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="font-semibold text-sm text-neutral-200">
+                    Para AI
+                  </span>
+                </div>
+
+                <div className="text-neutral-100 text-sm sm:text-base leading-relaxed whitespace-pre-wrap bg-neutral-950/40 border border-neutral-800/80 rounded-2xl p-5 sm:p-6 shadow-inner font-normal">
+                  {summary}
+                </div>
+
+                {/* Response Action Toolbar (Copy button) */}
+                <div className="flex items-center gap-3 mt-3 pt-1">
+                  <button
+                    onClick={() => {
+                      if (!summary) return;
+                      navigator.clipboard.writeText(summary);
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    }}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                      copied
+                        ? "bg-neutral-800 text-white border border-neutral-700"
+                        : "text-neutral-400 hover:text-white hover:bg-neutral-850"
+                    }`}
+                  >
+                    {copied ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-white" />
+                        <span>Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span>Copy</span>
+                      </>
+                    )}
+                  </button>
+
+                  <span className="text-neutral-600 text-xs">•</span>
+                  <span className="text-xs text-neutral-500 capitalize">
+                    {length} summary
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* ChatGPT Style Floating Prompt Bar */}
+        <div className="w-full mt-auto pt-4">
+          <div className="bg-[#212121] border border-neutral-700/80 focus-within:border-neutral-500 rounded-[26px] p-3 shadow-2xl transition-all duration-200">
+            {/* Attached File Chip (if PDF selected) */}
+            {pdfFile && (
+              <div className="inline-flex items-center gap-2 bg-[#2d2d2d] border border-neutral-700 rounded-xl px-3 py-1.5 text-xs text-neutral-200 mb-2 max-w-full">
+                <FileText className="w-3.5 h-3.5 text-neutral-300 shrink-0" />
+                <span className="truncate max-w-[200px] font-medium">
+                  {pdfFile.name}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setPdfFile(null)}
+                  className="text-neutral-400 hover:text-white p-0.5 rounded-md hover:bg-neutral-700 transition-colors ml-1"
+                  title="Remove file"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
+
+            {/* Textarea */}
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey && !loading) {
+                  e.preventDefault();
+                  handleSummarize();
+                }
+              }}
+              placeholder="Paste your text here or attach a PDF..."
+              rows={pdfFile ? 2 : 3}
+              className="w-full bg-transparent text-white placeholder-neutral-500 text-sm sm:text-base resize-none focus:outline-none px-2 py-1 leading-relaxed"
+            />
+
+            {/* Bottom Controls Row inside Prompt Box */}
+            <div className="flex items-center justify-between pt-2 px-1">
+              <div className="flex items-center gap-2">
+                {/* PDF Upload Button */}
+                <label
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-neutral-300 hover:text-white bg-[#2d2d2d] hover:bg-[#383838] border border-neutral-700/80 cursor-pointer transition-colors"
+                  title="Upload PDF document"
+                >
+                  <Paperclip className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Attach PDF</span>
                   <input
                     type="file"
                     accept=".pdf"
                     onChange={(e) => setPdfFile(e.target.files[0])}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    className="hidden"
                   />
-                  <div className="w-full border-2 border-dashed border-gray-200 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 bg-gray-50/50 group-hover:bg-indigo-50/50 group-hover:border-indigo-300 transition-all duration-300 h-[72px]">
-                    <div className="flex items-center gap-2">
-                      <UploadCloud className="w-5 h-5 text-gray-400 group-hover:text-indigo-500 transition-colors" />
-                      <span className="text-sm text-gray-500 group-hover:text-indigo-600 font-medium truncate max-w-[150px]">
-                        {pdfFile ? pdfFile.name : "Choose PDF"}
-                      </span>
-                    </div>
-                  </div>
+                </label>
+
+                {/* Summary Length Dropdown Pill */}
+                <div className="relative flex items-center">
+                  <select
+                    value={length}
+                    onChange={(e) => setLength(e.target.value)}
+                    className="appearance-none bg-[#2d2d2d] hover:bg-[#383838] border border-neutral-700/80 text-xs font-medium text-neutral-300 hover:text-white rounded-full pl-3 pr-7 py-1.5 cursor-pointer focus:outline-none transition-colors"
+                  >
+                    <option value="short" className="bg-[#212121] text-white">
+                      Short summary
+                    </option>
+                    <option value="medium" className="bg-[#212121] text-white">
+                      Medium summary
+                    </option>
+                    <option
+                      value="detailed"
+                      className="bg-[#212121] text-white"
+                    >
+                      Detailed summary
+                    </option>
+                  </select>
+                  <ChevronDown className="w-3 h-3 text-neutral-400 absolute right-2.5 pointer-events-none" />
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
-                  Summary Length
-                </label>
-                <select
-                  value={length}
-                  onChange={(e) => setLength(e.target.value)}
-                  className="w-full border border-gray-200 rounded-2xl p-4 bg-gray-50/50 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all duration-300 text-gray-700 appearance-none font-medium cursor-pointer h-[72px]"
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-                    backgroundPosition: `right 1rem center`,
-                    backgroundRepeat: `no-repeat`,
-                    backgroundSize: `1.5em 1.5em`,
-                  }}
-                >
-                  <option value="short">Short</option>
-                  <option value="medium">Medium</option>
-                  <option value="detailed">Detailed</option>
-                </select>
-              </div>
+              {/* ChatGPT Signature Circular Send Button */}
+              <button
+                onClick={handleSummarize}
+                disabled={loading || (!text.trim() && !pdfFile)}
+                className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+                  (text.trim() || pdfFile) && !loading
+                    ? "bg-white text-black hover:bg-neutral-200 shadow-md cursor-pointer"
+                    : "bg-[#2f2f2f] text-neutral-500 cursor-not-allowed"
+                }`}
+                title="Generate summary"
+              >
+                {loading ? (
+                  <Loader2 className="w-4 h-4 animate-spin text-black" />
+                ) : (
+                  <ArrowUp className="w-4 h-4 stroke-[2.5]" />
+                )}
+              </button>
             </div>
-
-            <motion.button
-              whileHover={{ scale: 1.01, translateY: -2 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={handleSummarize}
-              disabled={loading}
-              className="mt-8 w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white py-4 rounded-2xl font-bold text-lg shadow-lg shadow-indigo-500/30 transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="w-6 h-6 animate-spin" />
-                  Summarizing...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-5 h-5" />
-                  Generate Summary
-                </>
-              )}
-            </motion.button>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/50 mt-8 relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-indigo-500 to-purple-500" />
-
-          <div className="flex items-center justify-between mb-6 pl-2">
-            <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-              <CheckCircle2 className="w-6 h-6 text-green-500" />
-              Your Summary
-            </h2>
-
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                if (!summary) return;
-                navigator.clipboard.writeText(summary);
-                setCopied(true);
-                setTimeout(() => {
-                  setCopied(false);
-                }, 2000);
-              }}
-              disabled={!summary}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
-                copied
-                  ? "bg-green-100 text-green-700 border border-green-200"
-                  : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 shadow-sm"
-              }`}
-            >
-              {copied ? (
-                <>
-                  <CheckCircle2 className="w-4 h-4" />
-                  Copied!
-                </>
-              ) : (
-                <>
-                  <Copy className="w-4 h-4" />
-                  Copy
-                </>
-              )}
-            </motion.button>
           </div>
 
-          <div className="pl-2">
-            {summary ? (
-              <div className="text-gray-700 leading-relaxed whitespace-pre-wrap text-lg">
-                {summary}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-                <FileText className="w-12 h-12 mb-3 opacity-20" />
-                <p>Your AI-generated summary will appear here...</p>
-              </div>
-            )}
-          </div>
-        </motion.div>
+          <p className="text-center text-[11px] text-neutral-400 mt-2.5">
+            Para AI can analyze long articles and PDFs. Press{" "}
+            <kbd className="font-mono text-neutral-300">Enter</kbd> to
+            summarize,{" "}
+            <kbd className="font-mono text-neutral-300">Shift + Enter</kbd> for
+            new line.
+          </p>
+        </div>
       </div>
     </main>
   );
