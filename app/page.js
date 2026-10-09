@@ -101,10 +101,10 @@ export default function Home() {
           <div className="w-7 h-7 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-center text-white">
             <Sparkles className="w-4 h-4 text-neutral-200" />
           </div>
-          <span className="font-semibold text-sm tracking-tight text-violet-400 ">
+          <span className="font-semibold text-sm tracking-tight text-violet-400">
             Para AI
           </span>
-          <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-neutral-900 text-neutral-400 border border-neutral-800 hidden sm:inline-block ">
+          <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-neutral-900 text-neutral-400 hover:text-violet-300 border border-neutral-800 hidden sm:inline-block animate-pulse cursor-pointer">
             Anurag Developers
           </span>
         </div>
